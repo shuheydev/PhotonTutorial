@@ -11,7 +11,7 @@ namespace Com.Harusoft.PhotonTutorial
     {
         #region Private Serializable Fields
 
-        [Tooltip("1Room‚ ‚½‚è‚ÌÅ‘åƒvƒŒƒCƒ„[”BRoom‚ª–È‚Ìê‡AV‚µ‚¢ƒvƒŒƒCƒ„[‚ÍQ‰Á‚Å‚«‚¸AV‚µ‚¢Room‚ªì¬‚³‚ê‚Ü‚·")]
+        [Tooltip("1Roomã‚ãŸã‚Šã®æœ€å¤§ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼æ•°ã€‚RoomãŒæº€å¸­ã®å ´åˆã€æ–°ã—ã„ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¯å‚åŠ ã§ããšã€æ–°ã—ã„RoomãŒä½œæˆã•ã‚Œã¾ã™")]
         [SerializeField]
         private byte maxPlayersPerRoom = 4;
 
@@ -19,30 +19,43 @@ namespace Com.Harusoft.PhotonTutorial
 
         #region Private Fields
         /// <summary>
-        /// ƒNƒ‰ƒCƒAƒ“ƒg‚Ìƒo[ƒWƒ‡ƒ“”Ô†‚Å‚·B
-        /// ƒ†[ƒU[‚ÍgameVersion‚É‚æ‚Á‚Ä•ª‚¯‚ç‚ê‚Ü‚·B
-        /// ”j‰ó“I•ÏX‚ª‚ ‚Á‚½ê‡‚È‚Ç‚Ég‚¦‚éB
+        /// ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã®ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç•ªå·ã§ã™ã€‚
+        /// ãƒ¦ãƒ¼ã‚¶ãƒ¼ã¯gameVersionã«ã‚ˆã£ã¦åˆ†ã‘ã‚‰ã‚Œã¾ã™ã€‚
+        /// ç ´å£Šçš„å¤‰æ›´ãŒã‚ã£ãŸå ´åˆãªã©ã«ä½¿ãˆã‚‹ã€‚
         /// </summary>
         string gameVersion = "1";
+
+        [Tooltip("UI Panelã€‚åå‰ã®å…¥åŠ›ã‚„æ¥ç¶šã€ãƒ—ãƒ¬ã‚¤ã‚’æ‹…å½“ã™ã‚‹")]
+        [SerializeField]
+        private GameObject controlPanel;
+
+        [Tooltip("UI Labelã€‚æ¥ç¶šä¸­ã§ã‚ã‚‹ã“ã¨ã‚’ãƒ¦ãƒ¼ã‚¶ãƒ¼ã«æç¤ºã™ã‚‹")]
+        [SerializeField]
+        private GameObject progressLabel;
+
 
         #endregion
 
 
         #region MonoBehaviour CallBacks
         /// <summary>
-        /// Start‚æ‚è‘O‚ÉÀs‚³‚ê‚é‚ñ‚¶‚á‚È‚©‚Á‚½‚©‚ÈB‚½‚µ‚©B
+        /// Startã‚ˆã‚Šå‰ã«å®Ÿè¡Œã•ã‚Œã‚‹ã‚“ã˜ã‚ƒãªã‹ã£ãŸã‹ãªã€‚ãŸã—ã‹ã€‚
         /// </summary>
         private void Awake()
         {
-            //d—v
-            //PhotonNetwork.LoadLevel()‚ğMaster Client?‚Åg‚¦‚é‚æ‚¤‚É‚·‚éB
-            //“¯‚¶•”‰®‚É‚¢‚éƒ†[ƒU[‚ªLevel?‚ğ©“®“I‚É“¯Šú‚·‚é
+            //é‡è¦
+            //PhotonNetwork.LoadLevel()ã‚’Master Client?ã§ä½¿ãˆã‚‹ã‚ˆã†ã«ã™ã‚‹ã€‚
+            //åŒã˜éƒ¨å±‹ã«ã„ã‚‹ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒLevel?ã‚’è‡ªå‹•çš„ã«åŒæœŸã™ã‚‹
             PhotonNetwork.AutomaticallySyncScene = true;
         }
 
         private void Start()
         {
-            Connect();
+            //ButtonæŠ¼ä¸‹æ™‚ã«å‘¼ã°ã‚Œã‚‹ã‚ˆã†ã«ã—ãŸã€‚
+            //Connect();
+
+            progressLabel.SetActive(false);//éè¡¨ç¤º
+            controlPanel.SetActive(true);
         }
 
         #endregion
@@ -51,26 +64,29 @@ namespace Com.Harusoft.PhotonTutorial
         #region Public Methods
 
         /// <summary>
-        /// Ú‘±‚ğŠJn‚·‚éB
-        /// - ‚·‚Å‚ÉÚ‘±Ï‚İ‚Ìê‡‚ÍAƒ‰ƒ“ƒ_ƒ€‚ÉRoom‚ÉQ‰Á‚·‚é
-        /// - –¢Ú‘±‚Ìê‡‚ÍAƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğPhoton Cloud‚ÉÚ‘±‚·‚é
+        /// æ¥ç¶šã‚’é–‹å§‹ã™ã‚‹ã€‚
+        /// - ã™ã§ã«æ¥ç¶šæ¸ˆã¿ã®å ´åˆã¯ã€ãƒ©ãƒ³ãƒ€ãƒ ã«Roomã«å‚åŠ ã™ã‚‹
+        /// - æœªæ¥ç¶šã®å ´åˆã¯ã€ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’Photon Cloudã«æ¥ç¶šã™ã‚‹
         /// </summary>
-        private void Connect()
+        public void Connect()
         {
-            // Ú‘±‚¸‚İ‚©‚ğŠm”F‚·‚éB
-            //@–¢Ú‘±‚Ìê‡‚ÍƒT[ƒo[‚Ö‚ÌÚ‘±‚Ì‰Šú‰»‚ğs‚¤
+            progressLabel.SetActive(true);
+            controlPanel.SetActive(false);
+
+            // æ¥ç¶šãšã¿ã‹ã‚’ç¢ºèªã™ã‚‹ã€‚
+            //ã€€æœªæ¥ç¶šã®å ´åˆã¯ã‚µãƒ¼ãƒãƒ¼ã¸ã®æ¥ç¶šã®åˆæœŸåŒ–ã‚’è¡Œã†
             if (PhotonNetwork.IsConnected)
             {
-                // d—v!
-                //‚±‚±‚Åƒ‰ƒ“ƒ_ƒ€‚ÉRoom‚ÉQ‰Á‚·‚é
-                //Room‚Ö‚ÌQ‰Á‚É¸”s‚µ‚½ê‡AOnJoinRandomFailed()‚ğó‚¯æ‚éB
-                //‚»‚µ‚ÄRoom‚ğV‹Kì¬‚·‚é
+                // é‡è¦!
+                //ã“ã“ã§ãƒ©ãƒ³ãƒ€ãƒ ã«Roomã«å‚åŠ ã™ã‚‹
+                //Roomã¸ã®å‚åŠ ã«å¤±æ•—ã—ãŸå ´åˆã€OnJoinRandomFailed()ã‚’å—ã‘å–ã‚‹ã€‚
+                //ãã—ã¦Roomã‚’æ–°è¦ä½œæˆã™ã‚‹
                 PhotonNetwork.JoinRandomRoom();
             }
             else
             {
-                //d—v!
-                //‚Ü‚¸‚ÍPhotonƒIƒ“ƒ‰ƒCƒ“ƒT[ƒo[‚ÉÚ‘±‚µ‚È‚¯‚ê‚Î‚È‚ç‚È‚¢
+                //é‡è¦!
+                //ã¾ãšã¯Photonã‚ªãƒ³ãƒ©ã‚¤ãƒ³ã‚µãƒ¼ãƒãƒ¼ã«æ¥ç¶šã—ãªã‘ã‚Œã°ãªã‚‰ãªã„
                 PhotonNetwork.GameVersion = gameVersion;
                 PhotonNetwork.ConnectUsingSettings();
             }
@@ -82,29 +98,32 @@ namespace Com.Harusoft.PhotonTutorial
 
         public override void OnConnectedToMaster()
         {
-            //override‚Ì‚Æ‚«‚Éƒx[ƒXƒNƒ‰ƒXƒƒ\ƒbƒh‚ğŒÄ‚Ño‚³‚È‚¢‚±‚Æ!
+            //overrideã®ã¨ãã«ãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã•ãªã„ã“ã¨!
             //base.OnConnectedToMaster();
-            Debug.Log("PUN Basics Tutorial/Launcher: OnConnectedToMaster() ‚ÍPUN‚É‚æ‚Á‚ÄŒÄ‚Ño‚³‚ê‚Ü‚µ‚½");
+            Debug.Log("PUN Basics Tutorial/Launcher: OnConnectedToMaster() ã¯PUNã«ã‚ˆã£ã¦å‘¼ã³å‡ºã•ã‚Œã¾ã—ãŸ");
 
-            //d—v
-            //‹ó‚«‚ÌRoom‚ÉQ‰Á‚·‚é‚±‚Æ‚ğ‚İ‚éB
-            //Q‰Á‚Å‚«‚È‚©‚Á‚½ê‡‚ÍOnJoinRandomFailed()‚ªŒÄ‚Î‚ê‚éB
+            //é‡è¦
+            //ç©ºãã®Roomã«å‚åŠ ã™ã‚‹ã“ã¨ã‚’è©¦ã¿ã‚‹ã€‚
+            //å‚åŠ ã§ããªã‹ã£ãŸå ´åˆã¯OnJoinRandomFailed()ãŒå‘¼ã°ã‚Œã‚‹ã€‚
             PhotonNetwork.JoinRandomRoom();
         }
 
         public override void OnDisconnected(DisconnectCause cause)
         {
+            progressLabel.SetActive(false);
+            controlPanel.SetActive(true);
+
             //base.OnDisconnected(cause);
-            Debug.LogWarningFormat("PUN Basics Tutorial/Launcher: OnDisconnected() ‚ÍPUN‚É‚æ‚Á‚Ä——R {0} ‚ÅŒÄ‚Ño‚³‚ê‚Ü‚µ‚½", cause);
+            Debug.LogWarningFormat("PUN Basics Tutorial/Launcher: OnDisconnected() ã¯PUNã«ã‚ˆã£ã¦ç†ç”± {0} ã§å‘¼ã³å‡ºã•ã‚Œã¾ã—ãŸ", cause);
         }
 
         public override void OnJoinRandomFailed(short returnCode, string message)
         {
             //base.OnJoinRandomFailed(returnCode, message);
-            Debug.Log("PUN Basics Tutorial/Launcher: OnJoinRandomFailed() PUN‚É‚æ‚Á‚ÄŒÄ‚Ño‚³‚ê‚Ü‚µ‚½BQ‰Á‰Â”\‚ÈRoom‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BV‚µ‚­ì¬‚µ‚Ü‚·B\nŒÄ‚Ño‚µ’†:PhotonNetwork.CreateRoom");
+            Debug.Log("PUN Basics Tutorial/Launcher: OnJoinRandomFailed() PUNã«ã‚ˆã£ã¦å‘¼ã³å‡ºã•ã‚Œã¾ã—ãŸã€‚å‚åŠ å¯èƒ½ãªRoomãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚æ–°ã—ãä½œæˆã—ã¾ã™ã€‚\nå‘¼ã³å‡ºã—ä¸­:PhotonNetwork.CreateRoom");
 
-            //Room‚Ö‚ÌQ‰Á‚É¸”s‚µ‚Ü‚µ‚½B•”‰®‚ª‚È‚¢‚©A‚·‚×‚Ä–º‚Ì‰Â”\«‚ª‚ ‚è‚Ü‚·B
-            //‚È‚Ì‚ÅA•”‰®‚ğV‹Kì¬‚µ‚Ü‚·
+            //Roomã¸ã®å‚åŠ ã«å¤±æ•—ã—ã¾ã—ãŸã€‚éƒ¨å±‹ãŒãªã„ã‹ã€ã™ã¹ã¦æº€å®¤ã®å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ã€‚
+            //ãªã®ã§ã€éƒ¨å±‹ã‚’æ–°è¦ä½œæˆã—ã¾ã™
             PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = maxPlayersPerRoom });
         }
 
