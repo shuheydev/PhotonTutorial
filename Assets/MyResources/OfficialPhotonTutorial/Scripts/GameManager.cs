@@ -12,7 +12,18 @@ namespace Com.Harusoft.PhotonTutorial
     /// </summary>
     public class GameManager : MonoBehaviourPunCallbacks
     {
+        #region Public Fields
+
+        public static GameManager Instance;
+        #endregion
+
+
         #region Photone Callbacks
+
+        private void Start()
+        {
+            Instance = this;
+        }
 
         /// <summary>
         /// ローカルのプレイヤーがRoomを退出するときに呼ばれる。
