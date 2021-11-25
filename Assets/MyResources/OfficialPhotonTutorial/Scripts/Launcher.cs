@@ -33,6 +33,10 @@ namespace Com.Harusoft.PhotonTutorial
         [SerializeField]
         private GameObject progressLabel;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        bool isConnecting;
 
         #endregion
 
@@ -65,6 +69,7 @@ namespace Com.Harusoft.PhotonTutorial
 
         /// <summary>
         /// 接続を開始する。
+        /// これはユーザーによってPlayボタンが押されたときに実行されるようにしている。
         /// - すでに接続済みの場合は、ランダムにRoomに参加する
         /// - 未接続の場合は、アプリケーションのインスタンスをPhoton Cloudに接続する
         /// </summary>
@@ -88,7 +93,7 @@ namespace Com.Harusoft.PhotonTutorial
                 //重要!
                 //まずはPhotonオンラインサーバーに接続しなければならない
                 PhotonNetwork.GameVersion = gameVersion;
-                PhotonNetwork.ConnectUsingSettings();
+                isConnecting = PhotonNetwork.ConnectUsingSettings();
             }
         }
 
@@ -96,20 +101,31 @@ namespace Com.Harusoft.PhotonTutorial
 
         #region MonoBehaviourPunCallbacks Callbacks
 
+        /// <summary>
+        /// Photonによっていろんなタイミングで呼ばれる。
+        /// ユーザーによって接続されたときだけRoomに接続するようにしたい。
+        /// そのためのisConnectingフラグ
+        /// </summary>
         public override void OnConnectedToMaster()
         {
             //overrideのときにベースクラスメソッドを呼び出さないこと!
             //base.OnConnectedToMaster();
             Debug.Log("PUN Basics Tutorial/Launcher: OnConnectedToMaster() はPUNによって呼び出されました");
 
-            //重要
-            //空きのRoomに参加することを試みる。
-            //参加できなかった場合はOnJoinRandomFailed()が呼ばれる。
-            PhotonNetwork.JoinRandomRoom();
+            if (isConnecting)
+            {
+                //重要
+                //空きのRoomに参加することを試みる。
+                //参加できなかった場合はOnJoinRandomFailed()が呼ばれる。
+                PhotonNetwork.JoinRandomRoom();
+                isConnecting = false;
+            }
         }
 
         public override void OnDisconnected(DisconnectCause cause)
         {
+            isConnecting = false;
+
             progressLabel.SetActive(false);
             controlPanel.SetActive(true);
 
@@ -131,6 +147,12 @@ namespace Com.Harusoft.PhotonTutorial
         {
             //base.OnJoinedRoom();
 
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+            {
+                Debug.Log("Room for 1をロードしました");
+
+                PhotonNetwork.LoadLevel("Room for 1");
+            }
         }
 
         #endregion
