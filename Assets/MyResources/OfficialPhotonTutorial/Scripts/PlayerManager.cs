@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Com.Harusoft.PhotonTutorial
 {
-    public class PlayerManager : MonoBehaviourPunCallbacks
+    public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         #region Private Fields
 
@@ -41,9 +41,32 @@ namespace Com.Harusoft.PhotonTutorial
             }
         }
 
+        private void Start()
+        {
+            //カメラコンポーネントを取得
+            CameraWork2 _cameraWork = this.gameObject.GetComponent<CameraWork2>();
+
+            //取得できていることを確認する
+            if (_cameraWork != null)
+            {
+                //自分の場合、追跡する
+                if (photonView.IsMine)
+                {
+                    _cameraWork.OnStartFollowing();
+                }
+            }
+            else
+            {
+                Debug.LogError("<Color=Red><a>Missing</a></Color> PlayerPrefabのCameraWork2コンポーネント。", this);
+            }
+        }
+
         private void Update()
         {
-            ProcessInputs();
+            if (photonView.IsMine)
+            {
+                ProcessInputs();
+            }
 
             if (photonView.IsMine)
             {
@@ -135,6 +158,26 @@ namespace Com.Harusoft.PhotonTutorial
                 {
                     isFiring = false;
                 }
+            }
+        }
+
+        #endregion
+
+        #region IPunObservable implementation
+
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+            if (stream.IsWriting)
+            {
+                //このプレイヤーを所有しています。データを他のプレイヤーに送ります。
+                stream.SendNext(isFiring);
+                stream.SendNext(Health);
+            }
+            else
+            {
+                //ネットワークプレイヤー。データ受信
+                this.isFiring = (bool)stream.ReceiveNext();
+                this.Health = (float)stream.ReceiveNext();
             }
         }
         #endregion

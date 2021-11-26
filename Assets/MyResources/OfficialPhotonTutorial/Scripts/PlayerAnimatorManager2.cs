@@ -1,11 +1,12 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Com.Harusoft.PhotonTutorial
 {
     //[RequireComponent(typeof(Animator))]
-    public class PlayerAnimatorManager2 : MonoBehaviour
+    public class PlayerAnimatorManager2 : MonoBehaviourPun
     {
         #region Private Fields
 
@@ -31,6 +32,14 @@ namespace Com.Harusoft.PhotonTutorial
         // Update is called once per frame
         void Update()
         {
+            //自分以外のキャラクターのアップデートの場合は何もしない
+            //PhotonNetwork.IsConnectedをチェックしているのは、
+            //ネットワーク未接続状態でもプレファブをテストできるようにするため
+            if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
+            {
+                return;
+            }
+
             if (!animator)
             {
                 return;

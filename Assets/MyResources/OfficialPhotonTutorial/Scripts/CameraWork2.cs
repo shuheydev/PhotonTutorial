@@ -77,7 +77,7 @@ namespace Com.Harusoft.PhotonTutorial
         /// <summary>
         /// 追跡開始イベントを
         /// </summary>
-        private void OnStartFollowing()
+        public void OnStartFollowing()
         {
             //Main CameraのTransformをキャッシュする
             cameraTransform = Camera.main.transform;
