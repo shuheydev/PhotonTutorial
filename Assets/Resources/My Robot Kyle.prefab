@@ -282,9 +282,9 @@ GameObject:
   - component: {fileID: 6329838032805843268}
   - component: {fileID: 3711007373631495926}
   - component: {fileID: 459461130110359305}
-  - component: {fileID: -1152300602959163852}
   - component: {fileID: 7693829536081741276}
   - component: {fileID: 1248320699}
+  - component: {fileID: 1653094869418757863}
   m_Layer: 0
   m_Name: My Robot Kyle
   m_TagString: Untagged
@@ -358,23 +358,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   directionDampTime: 0.1
---- !u!114 &-1152300602959163852
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6329838032815334020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd08475b23aa548b7b9d28397d430b32, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  distance: 7
-  height: 3
-  centerOffset: {x: 0, y: 4, z: 0}
-  followOnStart: 1
-  smoothSpeed: 0.125
 --- !u!114 &7693829536081741276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -410,6 +393,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   beams: {fileID: 1613322074}
+  Health: 1
+--- !u!114 &1653094869418757863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6329838032815334020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04c184fa4eae19c4ea3e8445a504bcfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  distance: 7
+  height: 3
+  centerOffset: {x: 0, y: 4, z: 0}
+  followOnStart: 1
+  smoothSpeed: 0.125
 --- !u!1 &6329838032815334022
 GameObject:
   m_ObjectHideFlags: 0
