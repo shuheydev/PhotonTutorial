@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Com.Harusoft.PhotonTutorial
 {
-    public class PlayerUI : MonoBehaviour
+    public class PlayerUI2 : MonoBehaviour
     {
         #region Private Fields
 
@@ -78,9 +78,15 @@ namespace Com.Harusoft.PhotonTutorial
             //ここではプレイヤー
             if (targetTransform != null)
             {
+                //オブジェクトのワールド座標
                 targetPosition = targetTransform.position;
                 targetPosition.y += characterControllerHeight;
                 //3Dなワールドからスクリーン上での座標に変換している?
+
+                //オブジェクトのワールド座標をスクリーン座標に変換する
+                var targetScreenPos = Camera.main.WorldToScreenPoint(targetPosition);
+
+                
                 this.transform.position = Camera.main.WorldToScreenPoint(targetPosition);// + screenOffset;
             }
         }

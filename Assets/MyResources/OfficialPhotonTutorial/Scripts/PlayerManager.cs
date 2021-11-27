@@ -89,9 +89,9 @@ namespace Com.Harusoft.PhotonTutorial
             if (playerUiPrefab != null)
             {
                 GameObject _uiGo = Instantiate(playerUiPrefab);
-                _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
+                //_uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
                 //または、PlayerUIコンポーネントを取得してSetTargetを呼び出す。
-                //_uiGo.GetComponent<PlayerUI>().SetTarget(this);
+                _uiGo.GetComponent<PlayerUI2>().SetTarget(this);
             }
             else
             {
