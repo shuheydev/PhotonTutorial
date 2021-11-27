@@ -178,6 +178,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: My Robot Kyle
       objectReference: {fileID: 0}
+    - target: {fileID: 7693829536081741276, guid: 41ce766214faf2f4d8a876df33a13179, type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 41ce766214faf2f4d8a876df33a13179, type: 3}
 --- !u!1 &569803371

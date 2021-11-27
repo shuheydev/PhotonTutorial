@@ -381,6 +381,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 5178492156481987108}
   - {fileID: 7899008962715900994}
+  - {fileID: 1248320699}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -397,6 +398,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   beams: {fileID: 1613322074}
+  playerUiPrefab: {fileID: 1166745098693676616, guid: b06d5b8fb45f0de4a8c2865f5810f46e, type: 3}
   Health: 1
 --- !u!114 &1653094869418757863
 MonoBehaviour:

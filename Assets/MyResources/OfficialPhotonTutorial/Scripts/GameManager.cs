@@ -15,6 +15,10 @@ namespace Com.Harusoft.PhotonTutorial
         #region Public Fields
 
         public static GameManager Instance;
+
+        [Tooltip("プレイヤーを表すプレファブ")]
+        public GameObject playerPrefab;
+
         #endregion
 
 
@@ -23,6 +27,28 @@ namespace Com.Harusoft.PhotonTutorial
         private void Start()
         {
             Instance = this;
+
+            if (playerPrefab == null)
+            {
+                Debug.LogError("<Color=Red><a>Missing</a></Color> PlayerPrefabへの参照がありません。GameManagerにGameObjectをセットしてください", this);
+            }
+            else
+            {
+                if (PlayerManager.LocalPlayerInstance == null)
+                {
+                    Debug.LogFormat("ローカルプレイヤーをインスタンス化しています。{0}", SceneManagerHelper.ActiveSceneName);
+
+                    //Photonの場合はPhotonNetwork.Instantiateを使ってインスタンス化する。
+                    //これで同期もされる。
+                    //このため、PrefabはResourcesフォルダにないといけない
+                    PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(Random.Range(-5, 5), 5f, Random.Range(-5, 5)), Quaternion.identity, 0);
+
+                }
+                else
+                {
+                    Debug.LogFormat("Ignoring scene load for {0}", SceneManagerHelper.ActiveSceneName);
+                }
+            }
         }
 
         /// <summary>

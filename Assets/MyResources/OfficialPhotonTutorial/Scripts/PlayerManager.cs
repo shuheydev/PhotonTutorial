@@ -16,7 +16,10 @@ namespace Com.Harusoft.PhotonTutorial
 
         bool isFiring;
 
-        //PhotonView photonView;
+        [Tooltip("プレイヤーUIのプレファブ")]
+        [SerializeField]
+        private GameObject playerUiPrefab;
+
 
         #endregion
 
@@ -24,6 +27,9 @@ namespace Com.Harusoft.PhotonTutorial
 
         [Tooltip("現在のHP")]
         public float Health = 1f;
+
+        [Tooltip("ローカルプレイヤーのインスタンス。ローカルプレイヤーがシーンに描画されていることを意味する")]
+        public static GameObject LocalPlayerInstance;
 
         #endregion
 
@@ -39,6 +45,16 @@ namespace Com.Harusoft.PhotonTutorial
             {
                 beams.SetActive(false);
             }
+
+            if (photonView.IsMine)
+            {
+                PlayerManager.LocalPlayerInstance = this.gameObject;
+            }
+
+            //重要!
+            //ロード時にDestoryされないようにする。
+            //これによってレベル同期時に破壊されない。
+            DontDestroyOnLoad(this.gameObject);
         }
 
         private void Start()
@@ -59,7 +75,30 @@ namespace Com.Harusoft.PhotonTutorial
             {
                 Debug.LogError("<Color=Red><a>Missing</a></Color> PlayerPrefabのCameraWork2コンポーネント。", this);
             }
+
+#if UNITY_5_4_OR_NEWER
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded += (scene, loadingMode) =>
+            {
+                this.CalledOnLevelWasLoaded(scene.buildIndex);
+            };
+#endif
+
+            //PlayerUIを生成して、
+            //自分(Player)オブジェクトをセットする
+            //これでPlayerUIに名前とHPが表示される
+            if (playerUiPrefab != null)
+            {
+                GameObject _uiGo = Instantiate(playerUiPrefab);
+                _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
+                //または、PlayerUIコンポーネントを取得してSetTargetを呼び出す。
+                //_uiGo.GetComponent<PlayerUI>().SetTarget(this);
+            }
+            else
+            {
+                Debug.LogWarning("<Color=Red><a>Missing</a></Color> PlayerUiPrefab reference on player Prefab.", this);
+            }
         }
+
 
         private void Update()
         {
@@ -160,6 +199,27 @@ namespace Com.Harusoft.PhotonTutorial
                 }
             }
         }
+
+        private void CalledOnLevelWasLoaded(int level)
+        {
+            //プレイヤーが減って、アリーナのサイズが小さくなったときに、
+            //残ったプレイヤーがアリーナの外にでないように、アリーナの中心に戻す
+            if (!Physics.Raycast(transform.position, -Vector3.up, 5f))
+            {
+                transform.position = new Vector3(0f, 5f, 0f);
+            }
+
+            //UIをセットする
+            GameObject _uiGo = Instantiate(this.playerUiPrefab);
+            _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
+        }
+
+#if !UNITY_5_4_OR_NEWER
+        private void OnLevelWasLoaded(int level)
+        {
+            this.CalledOnLevelWasLoaded(level);
+        }
+#endif
 
         #endregion
 
